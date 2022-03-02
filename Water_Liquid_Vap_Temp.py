@@ -1,17 +1,14 @@
 import pandas as pd
-import numpy as np
 from icecream import ic
 #operate on the assumption that use temp value to get the rest of the properties
 #assume user has already verified that P and T values are at or above saturation
 
 #might be able to abstract this to also include pressure table
-class Water_Liquid_vap_Temp(object):
+class Water_Liquid_Vap_Temp(object):
     def __init__(self, filename):
         self.data = pd.read_csv(filename)
         self.MIN_T = self.data['T'].iat[0]
         self.MAX_T = self.data['T'].iat[-1]
-        ic(self.MIN_T)
-        ic(self.MAX_T)
 
     def get_properties(self, T):
         temps = self.data['T']
@@ -24,7 +21,6 @@ class Water_Liquid_vap_Temp(object):
 
         lbound = None
         hbound = None
-        found = False
         for i in range(len(temps)):
             if temps[i] == T:
                 ic('Found')
