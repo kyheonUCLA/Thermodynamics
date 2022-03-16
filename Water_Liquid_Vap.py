@@ -1,4 +1,3 @@
-from re import I
 import pandas as pd
 from icecream import ic
 
@@ -67,14 +66,14 @@ class Water_Liquid_Vap(object):
     def interpolate(self, i1, i2, x):  
         lrow = self.data.iloc[i1]
         hrow = self.data.iloc[i2]
-        T1 = lrow['T']
-        T2 = hrow['T']
+        S1 = lrow[self.input_type]
+        S2 = hrow[self.input_type]
         df = lrow.copy(deep=True)
         lerp = lambda p1, p2, x : (p1[1]-p2[1]) / (p1[0]-p2[0]) * (x - p1[0]) + p1[1]
         for key, value in df.iteritems():
-            if key == 'T':
+            if key == self.input_type:
                 df = df.replace({df[key] : x})
             else:
-                y = lerp((T1, lrow[key]), (T2, hrow[key]), x)
+                y = lerp((S1, lrow[key]), (S2, hrow[key]), x)
                 df = df.replace({df[key] : y})
         return df
