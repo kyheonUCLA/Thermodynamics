@@ -1,7 +1,9 @@
 import pandas as pd
 from icecream import ic
 
-class Water_Liquid_Vap(object):
+
+#this class actually handles any 2D numerical data
+class Liquid_Vap(object):
     def __init__(self, filename, input_type='None'):
         self.data = pd.read_csv(filename)
         if input_type == 'None':
@@ -33,6 +35,9 @@ class Water_Liquid_Vap(object):
         except Exception as e:
             raise e
 
+
+    #Finds the row in the data that corresponds to input state. If lerping is needed,
+    # it finds a lower and upper bound rows in the data to interpolate   
 
     def get_properties(self, input):
     
@@ -72,8 +77,13 @@ class Water_Liquid_Vap(object):
         lerp = lambda p1, p2, x : (p1[1]-p2[1]) / (p1[0]-p2[0]) * (x - p1[0]) + p1[1]
         for key, value in df.iteritems():
             if key == self.input_type:
+                ic('This is my key: ' + key)
                 df = df.replace({df[key] : x})
             else:
                 y = lerp((S1, lrow[key]), (S2, hrow[key]), x)
+                ic(key)
                 df = df.replace({df[key] : y})
+            ic(df['T']) 
+            #this literally makes no sense. Its replacing uf with T, maybe because they both have the same value of -40
+            #this above error only occurs when using R134a Temp table
         return df
