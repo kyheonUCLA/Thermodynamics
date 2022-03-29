@@ -73,17 +73,18 @@ class Liquid_Vap(object):
         hrow = self.data.iloc[i2]
         S1 = lrow[self.input_type]
         S2 = hrow[self.input_type]
-        df = lrow.copy(deep=True)
+
+        properties = pd.Series()
         lerp = lambda p1, p2, x : (p1[1]-p2[1]) / (p1[0]-p2[0]) * (x - p1[0]) + p1[1]
-        for key, value in df.iteritems():
+        for key, value in lrow.iteritems():
             if key == self.input_type:
-                ic('This is my key: ' + key)
-                df = df.replace({df[key] : x})
+                data = pd.Series({key: x})
+                properties = pd.concat([properties, data], axis=0)
             else:
                 y = lerp((S1, lrow[key]), (S2, hrow[key]), x)
-                ic(key)
-                df = df.replace({df[key] : y})
-            ic(df['T']) 
+                data = pd.Series({key: y})
+                properties = pd.concat([properties, data], axis=0)
+
             #this literally makes no sense. Its replacing uf with T, maybe because they both have the same value of -40
             #this above error only occurs when using R134a Temp table
-        return df
+        return properties

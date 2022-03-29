@@ -18,10 +18,11 @@ R22_Pres = 'data/csv_files/R22_PresSat.csv'
 
 obj = None
 try:
-    obj = Liquid_Vap(R134_Pres)
+    obj = Liquid_Vap(R134_Temp)
     ic(obj.MAX)
     ic(obj.MIN)
-    ic(obj.get_properties(float(input('Enter property value: '))))
+    props = obj.get_properties(float(input('Enter property value: ')))
+    print(props)
 except Exception as e:
     ic(e)
 
